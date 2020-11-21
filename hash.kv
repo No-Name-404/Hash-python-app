@@ -1,0 +1,52 @@
+#:import hex kivy.utils.get_color_from_hex
+#:import hashing main.hashing
+#:import toast kivymd.toast.toast
+#:import OpenUrl webbrowser.open
+
+MDScreen:
+    md_bg_color:hex('#ffffff')
+    Image:
+        pos_hint:{'center_x':.5,'center_y':.7}
+        source:'undraw_security_o890.png'
+        width:dp(100)
+
+    MDIconButton:
+        pos:dp(10),root.height-self.height-dp(10)
+        icon:'telegram'
+        on_release:
+            OpenUrl('https://t.me/No_Name_999')
+
+
+    MDFillRoundFlatIconButton:
+        id:path_btn
+        pos_hint:{'center_x':.5,'center_y':.5}
+        icon:'folder'
+        text:'   start hashing' if app.path == '' else app.path[:20]+('...' if len(app.path) > 20 else '')
+        on_release:app.file_manager_open()
+
+    MDBoxLayout:
+        spacing:dp(10)
+        adaptive_height:True
+        adaptive_width:True
+        pos:(root.width/2)-(self.width/2),dp(30)
+        id:box_hash
+        MDFillRoundFlatButton:
+            text:'pyc'
+            disabled:True if app.path == '' else False
+            on_release:
+                try:hashing(app.path,app).pyc()
+                except PermissionError: toast('Permission denied')
+
+        MDFillRoundFlatButton:
+            disabled:True if app.path == '' else False
+            text:'marshal'
+            on_release:
+                try:hashing(app.path,app).marshal()
+                except PermissionError: toast('Permission denied')
+
+        MDFillRoundFlatButton:
+            disabled:True if app.path == '' else False
+            text:'md5'
+            on_release:
+                try:hashing(app.path,app).md5()
+                except PermissionError: toast('Permission denied')
